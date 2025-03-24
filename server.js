@@ -1,11 +1,11 @@
 const WebSocket = require('ws');
-const server = new WebSocket.Server({ port: 8080 });
+const port = process.env.PORT || 8080; // Use Render’s port or 8080 locally
+const server = new WebSocket.Server({ port: port });
 
 server.on('connection', (ws) => {
     console.log('New client connected');
 
     ws.on('message', (message) => {
-        // Broadcast the message to all connected clients except the sender
         server.clients.forEach((client) => {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
                 client.send(message);
@@ -18,4 +18,4 @@ server.on('connection', (ws) => {
     });
 });
 
-console.log('WebSocket server running on ws://localhost:8080');
+console.log(`WebSocket server running on port ${port}`);
