@@ -6,6 +6,8 @@ server.on('connection', (ws) => {
     console.log('New client connected');
 
     ws.on('message', (message) => {
+        // Broadcast the message to all connected clients except the sender
+        console.log('Received message:', message);
         server.clients.forEach((client) => {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
                 client.send(message);
@@ -15,6 +17,10 @@ server.on('connection', (ws) => {
 
     ws.on('close', () => {
         console.log('Client disconnected');
+    });
+
+    ws.on('error', (error) => {
+        console.log('WebSocket error:', error);
     });
 });
 
